@@ -30,6 +30,7 @@ Publish the website in the given URL.
 
 # PROGRAM :
 ~~~
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -149,6 +150,39 @@ Publish the website in the given URL.
     </div>
 </body>
 </html>
+~~~
+## views.py
+~~~
+from django.shortcuts import render 
+def powerofbulb(request): 
+    context={} 
+    context['power'] = "0" 
+    context['i'] = "0" 
+    context['r'] = "0" 
+    if request.method == 'POST': 
+        print("POST method is used")
+        i = request.POST.get('I','0')
+        r = request.POST.get('R','0')
+        print('request=',request) 
+        print('Intensity=',i) 
+        print('Resistance=',r) 
+        power = (int(i) ** 2)*int(r) 
+        context['power'] = power 
+        context['i'] = i
+        context['r'] = r
+        print('power=',power) 
+    return render(request,'mathapp/math.html',context)
+~~~
+## urls.py
+~~~
+from django.contrib import admin
+from django.urls import path
+from mathapp import views
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('powerofbulb/',views.powerofbulb,name="powerofbulb"),
+    path('',views.powerofbulb,name="powerofbulbroot")
+]
 ~~~
 # SERVER SIDE PROCESSING:
 ![Screenshot 2024-12-08 113250](https://github.com/user-attachments/assets/bcd9daa5-0fed-432e-874a-e29256fed9b0)
